@@ -1,0 +1,311 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurants - Kodelicious</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body class="page-show-restaurants">
+    <!-- Sidebar -->
+        <button class="mobile-menu-btn" type="button" aria-label="Open menu" onclick="toggleMobileSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">K</div>
+            <span class="sidebar-logo-text">Kodelicious</span>
+        </div>
+      <nav class="sidebar-nav">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span class="toggle-text">Close</span>
+        </button>
+        <a href="{% if is_admin %}/admin_home{% else %}/customer_home{% endif %}" class="sidebar-link" title="Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span class="sidebar-label">Dashboard</span>
+        </a>
+        <a href="/" class="sidebar-link" title="Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span class="sidebar-label">Home</span>
+        </a>
+        <a href="/open_show_restaurant" class="sidebar-link active" title="Restaurants">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          <span class="sidebar-label">Restaurants</span>
+        </a>
+        <a href="/open_add_restaurant" class="sidebar-link" title="Add Restaurant">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span class="sidebar-label">Add Restaurant</span>
+        </a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-user-row">
+          <div class="sidebar-user">{{ username|first|upper }}</div>
+          <div class="sidebar-user-info">
+            <span class="sidebar-username">{{ username }}</span>
+            <a href="/logout" class="sidebar-logout">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1>Restaurants</h1>
+          <p>Manage your restaurant listings and menus</p>
+        </div>
+        <a href="open_add_restaurant" class="btn-add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Restaurant
+        </a>
+      </div>
+
+      {% if restaurantList %}
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" id="searchInput" placeholder="Search restaurants..." oninput="filterRestaurants()" />
+        </div>
+        <select class="filter-dropdown" id="cuisineFilter" onchange="filterRestaurants()">
+          <option value="all">All Cuisines</option>
+        </select>
+        <select class="filter-dropdown" id="sortSelect" onchange="filterRestaurants()">
+          <option value="name-asc">Name A-Z</option>
+          <option value="name-desc">Name Z-A</option>
+          <option value="rating-desc">Rating High-Low</option>
+          <option value="rating-asc">Rating Low-High</option>
+        </select>
+        <div class="toolbar-right">
+          <span class="result-count" id="resultCount"></span>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th class="check-cell"><input type="checkbox" id="selectAll" onclick="toggleAll(this)" /></th>
+              <th>Restaurant</th>
+              <th>Cuisine</th>
+              <th>Rating</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            {% for r in restaurantList %}
+            <tr data-name="{{ r.name|lower }}" data-cuisine="{{ r.cuisine|lower }}" data-rating="{{ r.rating }}">
+              <td class="check-cell"><input type="checkbox" class="row-check" /></td>
+              <td>
+                <div class="restaurant-cell">
+                  <img class="restaurant-thumb" src="{{ r.picture }}" alt="{{ r.name }}" />
+                  <div class="restaurant-info">
+                    <span class="name">{{ r.name }}</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="cuisine-badge">{{ r.cuisine }}</span></td>
+              <td><span class="rating-cell">{{ r.rating }} <svg width="14" height="14" viewBox="0 0 24 24" fill="#C9A96E" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span></td>
+              <td>
+                {% if r.rating >= 4.5 %}
+                <span class="status-badge high"><span class="status-dot"></span> Top Rated</span>
+                {% elif r.rating >= 3.0 %}
+                <span class="status-badge medium"><span class="status-dot"></span> Good</span>
+                {% else %}
+                <span class="status-badge low"><span class="status-dot"></span> New</span>
+                {% endif %}
+              </td>
+              <td class="action-cell">
+                <div class="action-menu">
+                  <button class="action-btn" onclick="toggleDropdown(this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="action-dropdown">
+                    <a href="{% url 'open_update_restaurant' r.id %}" class="edit-link">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                      Edit Info
+                    </a>
+                    <a href="{% url 'open_update_menu' r.id %}" class="menu-link">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+                      Edit Menu
+                    </a>
+                    <a href="#" class="delete-link" onclick="openDeleteModal(event, '{{ r.name|escapejs }}', '{% url 'delete_restaurant' r.id %}')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                      Delete
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <span class="empty-icon">&#127968;</span>
+        <strong>No restaurants yet</strong>
+        <p>Add your first restaurant to get started.</p>
+      </div>
+      {% endif %}
+    </main>
+
+    <!-- Delete Modal -->
+    <div class="modal-overlay" id="deleteModal">
+      <div class="modal">
+        <div class="modal-icon">&#9888;</div>
+        <h3>Delete Restaurant</h3>
+        <p>Are you sure you want to delete <strong id="modalRestaurantName"></strong>? This action cannot be undone.</p>
+        <div class="modal-btns">
+          <a class="btn-cancel" onclick="closeDeleteModal()">Cancel</a>
+          <a href="#" class="btn-confirm-delete" id="confirmDeleteBtn">Delete</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ── Populate cuisine filter ──
+      const rows = document.querySelectorAll('#tableBody tr');
+      const cuisines = new Set();
+      rows.forEach(r => cuisines.add(r.dataset.cuisine));
+      const cuisineFilter = document.getElementById('cuisineFilter');
+      if (cuisineFilter) {
+        [...cuisines].sort().forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c.charAt(0).toUpperCase() + c.slice(1);
+          cuisineFilter.appendChild(opt);
+        });
+      }
+
+      // ── Select All ──
+      function toggleAll(el) {
+        document.querySelectorAll('.row-check').forEach(c => c.checked = el.checked);
+      }
+
+      // ── Filter + Sort ──
+      function filterRestaurants() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const cuisine = document.getElementById('cuisineFilter').value;
+        const sort = document.getElementById('sortSelect').value;
+        const arr = Array.from(rows);
+        let visible = 0;
+
+        arr.forEach(r => {
+          const matchSearch = r.dataset.name.includes(query) || r.dataset.cuisine.includes(query);
+          const matchCuisine = cuisine === 'all' || r.dataset.cuisine === cuisine;
+          const show = matchSearch && matchCuisine;
+          r.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+
+        arr.sort((a, b) => {
+          switch (sort) {
+            case 'name-asc': return a.dataset.name.localeCompare(b.dataset.name);
+            case 'name-desc': return b.dataset.name.localeCompare(a.dataset.name);
+            case 'rating-desc': return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+            case 'rating-asc': return parseFloat(a.dataset.rating) - parseFloat(b.dataset.rating);
+            default: return 0;
+          }
+        });
+
+        const tbody = document.getElementById('tableBody');
+        arr.forEach(r => tbody.appendChild(r));
+
+        document.getElementById('resultCount').innerHTML = `<strong>${visible}</strong> of ${rows.length}`;
+      }
+
+      // ── Action Dropdown ──
+      function toggleDropdown(btn) {
+        const dd = btn.nextElementSibling;
+        document.querySelectorAll('.action-dropdown').forEach(d => { if (d !== dd) d.classList.remove('show'); });
+        dd.classList.toggle('show');
+      }
+
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.action-menu')) {
+          document.querySelectorAll('.action-dropdown').forEach(d => d.classList.remove('show'));
+        }
+      });
+
+      // ── Delete Modal ──
+      function openDeleteModal(e, name, url) {
+        e.preventDefault();
+        document.getElementById('modalRestaurantName').textContent = name;
+        document.getElementById('confirmDeleteBtn').href = url;
+        document.getElementById('deleteModal').classList.add('active');
+      }
+
+      function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('active');
+      }
+
+      document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteModal();
+      });
+
+      // ── Init ──
+      filterRestaurants();
+    </script>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var main = document.querySelector('.main');
+            sidebar.classList.toggle('expanded');
+            if (sidebar.classList.contains('expanded')) {
+                main.style.marginLeft = '220px';
+            } else {
+                main.style.marginLeft = '72px';
+            }
+        }
+    </script>
+      <script>
+        function toggleMobileSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            if (!sidebar || !backdrop) return;
+            var open = sidebar.classList.toggle('mobile-open');
+            sidebar.classList.toggle('expanded', open);
+            backdrop.classList.toggle('show', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+        var _originalToggleSidebar = window.toggleSidebar;
+        window.toggleSidebar = function () {
+            if (window.matchMedia('(max-width: 900px)').matches) {
+                toggleMobileSidebar();
+                return;
+            }
+            if (_originalToggleSidebar) _originalToggleSidebar();
+        };
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+        });
+        document.addEventListener('click', function (e) {
+            if (e.target.closest && e.target.closest('.sidebar-backdrop')) toggleMobileSidebar();
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('.sidebar-link'), function (link) {
+            link.addEventListener('click', function () {
+                var sidebar = document.getElementById('sidebar');
+                if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+            });
+        });
+    </script>
+
+</body>
+</html>

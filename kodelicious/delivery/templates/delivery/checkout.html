@@ -1,0 +1,530 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Checkout - Kodelicious</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body class="page-checkout">
+    <button
+      class="mobile-menu-btn"
+      type="button"
+      aria-label="Open menu"
+      onclick="toggleMobileSidebar()"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+      >
+        <line
+          x1="4"
+          y1="7"
+          x2="20"
+          y2="7"
+        />
+        <line
+          x1="4"
+          y1="12"
+          x2="20"
+          y2="12"
+        />
+        <line
+          x1="4"
+          y1="17"
+          x2="20"
+          y2="17"
+        />
+      </svg>
+    </button>
+    <div
+      class="sidebar-backdrop"
+      id="sidebarBackdrop"
+    ></div>
+
+    <aside
+      class="sidebar"
+      id="sidebar"
+    >
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">K</div>
+        <span class="sidebar-logo-text">Kodelicious</span>
+      </div>
+      <nav class="sidebar-nav">
+        <button
+          class="sidebar-toggle"
+          onclick="toggleSidebar()"
+        >
+          <svg
+            class="icon-menu"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          >
+            <line
+              x1="4"
+              y1="7"
+              x2="20"
+              y2="7"
+            />
+            <line
+              x1="4"
+              y1="12"
+              x2="20"
+              y2="12"
+            />
+            <line
+              x1="4"
+              y1="17"
+              x2="20"
+              y2="17"
+            />
+          </svg>
+          <svg
+            class="icon-close"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line
+              x1="18"
+              y1="6"
+              x2="6"
+              y2="18"
+            />
+            <line
+              x1="6"
+              y1="6"
+              x2="18"
+              y2="18"
+            />
+          </svg>
+          <span class="toggle-text">Close</span>
+        </button>
+        <a
+          href="/customer_home"
+          class="sidebar-link"
+          title="Dashboard"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect
+              x="3"
+              y="3"
+              width="7"
+              height="7"
+            />
+            <rect
+              x="14"
+              y="3"
+              width="7"
+              height="7"
+            />
+            <rect
+              x="14"
+              y="14"
+              width="7"
+              height="7"
+            />
+            <rect
+              x="3"
+              y="14"
+              width="7"
+              height="7"
+            />
+          </svg>
+          <span class="sidebar-label">Dashboard</span>
+        </a>
+        <a
+          href="/"
+          class="sidebar-link"
+          title="Home"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          <span class="sidebar-label">Home</span>
+        </a>
+        <a
+          href="/view_cart"
+          class="sidebar-link active"
+          title="Cart"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle
+              cx="9"
+              cy="21"
+              r="1"
+            />
+            <circle
+              cx="20"
+              cy="21"
+              r="1"
+            />
+            <path
+              d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+            />
+          </svg>
+          <span class="sidebar-label">Cart</span>
+        </a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-user-row">
+          <div class="sidebar-user">{{ username|first|upper }}</div>
+          <div class="sidebar-user-info">
+            <span class="sidebar-username">{{ username }}</span>
+            <a
+              href="/logout"
+              class="sidebar-logout"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line
+                  x1="21"
+                  y1="12"
+                  x2="9"
+                  y2="12"
+                />
+              </svg>
+              Log Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="page-header">
+        <h1>Checkout</h1>
+        <p>Review your order and place it</p>
+      </div>
+
+      {% if error %}
+      <div class="error-box">{{ error }}</div>
+      {% endif %}
+
+      <div class="checkout-layout">
+        <div>
+          <div class="card">
+            <div class="card-title">Order Items</div>
+            {% for cart_item in cart_items %}
+            <div class="order-item">
+              <img
+                src="{{ cart_item.menu_item.picture }}"
+                alt="{{ cart_item.menu_item.name }}"
+                class="order-item-img"
+              />
+              <div class="order-item-details">
+                <div class="order-item-name">
+                  {{ cart_item.menu_item.name }}
+                </div>
+                <div class="order-item-restaurant">
+                  {{ cart_item.menu_item.restaurant.name }}
+                </div>
+                <div class="order-item-qty">Qty: {{ cart_item.quantity }}</div>
+              </div>
+              <div class="order-item-price">
+                &#8377;{{ cart_item.get_total_price|floatformat:2 }}
+              </div>
+            </div>
+            {% endfor %}
+            <a
+              href="{% url 'view_cart' %}"
+              class="btn-back-cart"
+              >Back to Cart</a
+            >
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-title">Order Summary</div>
+            {% for cart_item in cart_items %}
+            <div class="summary-row">
+              <span class="summary-label"
+                >{{ cart_item.menu_item.name }} x {{ cart_item.quantity }}</span
+              >
+              <span class="summary-value"
+                >&#8377;{{ cart_item.get_total_price|floatformat:2 }}</span
+              >
+            </div>
+            {% endfor %}
+            <hr class="summary-divider" />
+            <div class="summary-row">
+              <span class="summary-label">Delivery</span>
+              <span
+                class="summary-value"
+                style="color: #16a34a"
+                >Free</span
+              >
+            </div>
+            <hr class="summary-divider" />
+            <div class="summary-total">
+              <span class="summary-total-label">Total</span>
+              <span class="summary-total-value"
+                >&#8377;{{ total_price|floatformat:2 }}</span
+              >
+            </div>
+
+            <div
+              id="pay-error"
+              class="error-box"
+              hidden
+            ></div>
+
+            <button
+              type="button"
+              class="btn-pay"
+              id="pay-button"
+              onclick="startPayment()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span id="pay-button-label"
+                >Pay &#8377;{{ total_price|floatformat:2 }}</span
+              >
+            </button>
+
+            <form
+              id="payment-success-form"
+              method="post"
+              action="{% url 'payment_success' username %}"
+              hidden
+            >
+              {% csrf_token %}
+              <input type="hidden" name="razorpay_order_id" />
+              <input type="hidden" name="razorpay_payment_id" />
+              <input type="hidden" name="razorpay_signature" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        var main = document.querySelector(".main");
+        sidebar.classList.toggle("expanded");
+        if (sidebar.classList.contains("expanded")) {
+          main.style.marginLeft = "220px";
+        } else {
+          main.style.marginLeft = "72px";
+        }
+      }
+    </script>
+    <script>
+      function toggleMobileSidebar() {
+        var sidebar = document.getElementById("sidebar");
+        var backdrop = document.getElementById("sidebarBackdrop");
+        if (!sidebar || !backdrop) return;
+        var open = sidebar.classList.toggle("mobile-open");
+        sidebar.classList.toggle("expanded", open);
+        backdrop.classList.toggle("show", open);
+        document.body.style.overflow = open ? "hidden" : "";
+      }
+      var _originalToggleSidebar = window.toggleSidebar;
+      window.toggleSidebar = function () {
+        if (window.matchMedia("(max-width: 900px)").matches) {
+          toggleMobileSidebar();
+          return;
+        }
+        if (_originalToggleSidebar) _originalToggleSidebar();
+      };
+      document.addEventListener("keydown", function (e) {
+        if (e.key !== "Escape") return;
+        var sidebar = document.getElementById("sidebar");
+        if (sidebar && sidebar.classList.contains("mobile-open"))
+          toggleMobileSidebar();
+      });
+      document.addEventListener("click", function (e) {
+        if (e.target.closest && e.target.closest(".sidebar-backdrop"))
+          toggleMobileSidebar();
+      });
+      Array.prototype.forEach.call(
+        document.querySelectorAll(".sidebar-link"),
+        function (link) {
+          link.addEventListener("click", function () {
+            var sidebar = document.getElementById("sidebar");
+            if (sidebar && sidebar.classList.contains("mobile-open"))
+              toggleMobileSidebar();
+          });
+        },
+      );
+    </script>
+    <script>
+      (function () {
+        var payButton = document.getElementById("pay-button");
+        var payLabel = document.getElementById("pay-button-label");
+        var payError = document.getElementById("pay-error");
+        var successForm = document.getElementById("payment-success-form");
+        var defaultLabel = payLabel ? payLabel.textContent : "Pay";
+
+        function showError(message) {
+          if (!payError) return;
+          payError.textContent = message;
+          payError.hidden = false;
+        }
+
+        function resetButton() {
+          if (!payButton) return;
+          payButton.disabled = false;
+          if (payLabel) payLabel.textContent = defaultLabel;
+        }
+
+        function fail(message) {
+          showError(message);
+          resetButton();
+        }
+
+        function csrfToken() {
+          var input = successForm.querySelector("[name=csrfmiddlewaretoken]");
+          return input ? input.value : "";
+        }
+
+        window.startPayment = function () {
+          if (!payButton || payButton.disabled) return;
+          payError.hidden = true;
+
+          if (typeof Razorpay === "undefined") {
+            showError("Payment library failed to load. Please refresh the page.");
+            return;
+          }
+
+          payButton.disabled = true;
+          payLabel.textContent = "Starting payment...";
+
+          fetch("{% url 'razorpay_create_order' %}", {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": csrfToken(),
+              "Content-Type": "application/x-www-form-urlencoded",
+              "X-Requested-With": "XMLHttpRequest",
+            },
+            body: "step=create_order",
+          })
+            .then(function (response) {
+              return response.json().then(function (data) {
+                return { ok: response.ok, data: data };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok) {
+                throw new Error(result.data.error || "Could not start the payment.");
+              }
+              openRazorpay(result.data);
+            })
+            .catch(function (error) {
+              fail(error.message || "Could not start the payment. Please try again.");
+            });
+        };
+
+        function openRazorpay(order) {
+          var options = {
+            key: order.key_id,
+            amount: order.amount,
+            currency: order.currency,
+            name: "Kodelicious",
+            description: "Food order payment",
+            order_id: order.order_id,
+            prefill: {
+              name: "{{ username|default:'' }}",
+            },
+            theme: {
+              color: "#1A1B2E",
+            },
+            handler: function (response) {
+              [
+                "razorpay_order_id",
+                "razorpay_payment_id",
+                "razorpay_signature",
+              ].forEach(function (field) {
+                successForm.querySelector("[name=" + field + "]").value =
+                  response[field] || "";
+              });
+              payLabel.textContent = "Verifying payment...";
+              successForm.submit();
+            },
+            modal: {
+              ondismiss: function () {
+                resetButton();
+              },
+            },
+          };
+
+          var rzp = new Razorpay(options);
+          rzp.on("payment.failed", function (response) {
+            fail(
+              (response.error && response.error.description) ||
+                "Payment failed. You have not been charged.",
+            );
+          });
+          rzp.open();
+        }
+      })();
+    </script>
+  </body>
+</html>

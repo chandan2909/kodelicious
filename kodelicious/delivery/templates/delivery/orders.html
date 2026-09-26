@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Placed - Kodelicious</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body class="page-orders">
+        <button class="mobile-menu-btn" type="button" aria-label="Open menu" onclick="toggleMobileSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">K</div>
+            <span class="sidebar-logo-text">Kodelicious</span>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+                <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span class="toggle-text">Close</span>
+            </button>
+            <a href="/customer_home" class="sidebar-link" title="Dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span class="sidebar-label">Dashboard</span>
+            </a>
+            <a href="/" class="sidebar-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="sidebar-label">Home</span>
+            </a>
+            <a href="/view_cart" class="sidebar-link" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span class="sidebar-label">Cart</span>
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user-row">
+                <div class="sidebar-user">{{ username|first|upper }}</div>
+                <div class="sidebar-user-info">
+                    <span class="sidebar-username">{{ username }}</span>
+                    <a href="/logout" class="sidebar-logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="page-header">
+            <h1>Order Confirmed</h1>
+            <p>Thank you for your order!</p>
+        </div>
+
+        <div class="success-card">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="success-title">Order Placed Successfully!</div>
+            <div class="success-subtitle">Your order has been confirmed and is being prepared.</div>
+
+            {% if order %}
+            <div class="order-details">
+                <div class="detail-row">
+                    <span class="detail-label">Order ID</span>
+                    <span class="detail-value">#{{ order.id }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value" style="color: #16a34a; text-transform: capitalize;">{{ order.status }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Total Amount</span>
+                    <span class="detail-value">&#8377;{{ order.total_price|floatformat:2 }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Delivery Address</span>
+                    <span class="detail-value">{{ order.address }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <a href="{% url 'customer_home' %}" class="btn-continue">
+                Continue Shopping
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var main = document.querySelector('.main');
+            sidebar.classList.toggle('expanded');
+            if (sidebar.classList.contains('expanded')) {
+                main.style.marginLeft = '220px';
+            } else {
+                main.style.marginLeft = '72px';
+            }
+        }
+    </script>
+    <script>
+        function toggleMobileSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            if (!sidebar || !backdrop) return;
+            var open = sidebar.classList.toggle('mobile-open');
+            sidebar.classList.toggle('expanded', open);
+            backdrop.classList.toggle('show', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+        var _originalToggleSidebar = window.toggleSidebar;
+        window.toggleSidebar = function () {
+            if (window.matchMedia('(max-width: 900px)').matches) {
+                toggleMobileSidebar();
+                return;
+            }
+            if (_originalToggleSidebar) _originalToggleSidebar();
+        };
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+        });
+        document.addEventListener('click', function (e) {
+            if (e.target.closest && e.target.closest('.sidebar-backdrop')) toggleMobileSidebar();
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('.sidebar-link'), function (link) {
+            link.addEventListener('click', function () {
+                var sidebar = document.getElementById('sidebar');
+                if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+            });
+        });
+    </script>
+
+</body>
+</html>

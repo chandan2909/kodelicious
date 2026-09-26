@@ -1,0 +1,212 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kodelicious - Premium Food Delivery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body class="page-landing">
+        <button class="mobile-menu-btn" type="button" aria-label="Open menu" onclick="toggleMobileSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">K</div>
+            <span class="sidebar-logo-text">Kodelicious</span>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+                <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span class="toggle-text">Close</span>
+            </button>
+            <a href="{% if is_admin %}/admin_home{% else %}/customer_home{% endif %}" class="sidebar-link" title="Dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span class="sidebar-label">Dashboard</span>
+            </a>
+            <a href="/" class="sidebar-link active" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="sidebar-label">Home</span>
+            </a>
+            <a href="/view_cart" class="sidebar-link" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span class="sidebar-label">Cart</span>
+            </a>
+            {% if is_admin %}
+            <a href="/open_show_restaurant" class="sidebar-link" title="Restaurants">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                <span class="sidebar-label">Restaurants</span>
+            </a>
+            {% endif %}
+        </nav>
+        <div class="sidebar-bottom">
+            {% if logged_in %}
+            <div class="sidebar-user-row">
+                <div class="sidebar-user">{{ username|first|upper }}</div>
+                <div class="sidebar-user-info">
+                    <span class="sidebar-username">{{ username }}</span>
+                    <a href="/logout" class="sidebar-logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <a href="open_signin" class="sidebar-logout" style="width: 100%;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Log In
+            </a>
+            {% endif %}
+        </div>
+    </aside>
+
+    <main class="main">
+<nav>
+      <a href="/" class="logo">
+        <div class="logo-icon">K</div>
+        Kodelicious
+      </a>
+      <div class="nav-links">
+        <a href="/" class="nav-active">Home</a>
+        {% if logged_in %}
+        <div class="user-menu">
+          <div class="user-avatar" onclick="this.nextElementSibling.classList.toggle('show')">{{ username|first|upper }}</div>
+          <div class="user-dropdown">
+            <a href="{% if is_admin %}admin_home{% else %}customer_home{% endif %}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Dashboard
+            </a>
+            {% if is_admin %}
+            <a href="open_show_restaurant">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg>
+              Restaurants
+            </a>
+            {% endif %}
+            <a href="logout" class="logout-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Log Out
+            </a>
+          </div>
+        </div>
+        {% else %}
+        <a href="open_signup">Sign up</a>
+        <a href="open_signin" class="btn-nav">Log in</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-badge">&#127828; Premium Food Delivery</div>
+          <h1>Delicious Food,<br /><span class="accent">Delivered Fast.</span></h1>
+          <p>Your favorite meals from the best restaurants, delivered to your doorstep with care and precision. Order now and elevate your dining experience.</p>
+          <div class="hero-btns">
+            {% if logged_in %}
+            <a class="btn btn-primary" href="{% if is_admin %}admin_home{% else %}customer_home{% endif %}">Go to Dashboard</a>
+            {% else %}
+            <a class="btn btn-primary" href="open_signup">Browse Restaurants</a>
+            <a class="btn btn-outline" href="open_signin">Sign In</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-value">50+</div>
+            <div class="stat-label">Restaurants</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">10K+</div>
+            <div class="stat-label">Orders Delivered</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">4.8&#11088;</div>
+            <div class="stat-label">Average Rating</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">30 min</div>
+            <div class="stat-label">Fast Delivery</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="features">
+      <div class="feature">
+        <span class="feature-icon">&#9889;</span>
+        <h4>Fast Delivery</h4>
+        <p>Get your food delivered in under 30 minutes, hot and fresh.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">&#127860;</span>
+        <h4>Top Restaurants</h4>
+        <p>Choose from the finest restaurants in your city.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-icon">&#128179;</span>
+        <h4>Easy Payment</h4>
+        <p>Pay with your preferred method, seamless and secure.</p>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-menu')) {
+          document.querySelectorAll('.user-dropdown').forEach(d => d.classList.remove('show'));
+        }
+      });
+    </script>
+      </main>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var main = document.querySelector('.main');
+            sidebar.classList.toggle('expanded');
+            if (sidebar.classList.contains('expanded')) {
+                main.style.marginLeft = '220px';
+            } else {
+                main.style.marginLeft = '72px';
+            }
+        }
+    </script>
+    <script>
+        function toggleMobileSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            if (!sidebar || !backdrop) return;
+            var open = sidebar.classList.toggle('mobile-open');
+            sidebar.classList.toggle('expanded', open);
+            backdrop.classList.toggle('show', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+        var _originalToggleSidebar = window.toggleSidebar;
+        window.toggleSidebar = function () {
+            if (window.matchMedia('(max-width: 900px)').matches) {
+                toggleMobileSidebar();
+                return;
+            }
+            if (_originalToggleSidebar) _originalToggleSidebar();
+        };
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+        });
+        document.addEventListener('click', function (e) {
+            if (e.target.closest && e.target.closest('.sidebar-backdrop')) toggleMobileSidebar();
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('.sidebar-link'), function (link) {
+            link.addEventListener('click', function () {
+                var sidebar = document.getElementById('sidebar');
+                if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+            });
+        });
+    </script>
+</body>
+</html>

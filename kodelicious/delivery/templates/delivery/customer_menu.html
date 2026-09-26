@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ restaurant.name }} Menu - Kodelicious</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body class="page-customer-menu">
+        <button class="mobile-menu-btn" type="button" aria-label="Open menu" onclick="toggleMobileSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">K</div>
+            <span class="sidebar-logo-text">Kodelicious</span>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+                <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span class="toggle-text">Close</span>
+            </button>
+            <a href="/customer_home" class="sidebar-link active" title="Dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span class="sidebar-label">Dashboard</span>
+            </a>
+            <a href="/" class="sidebar-link" title="Home">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <span class="sidebar-label">Home</span>
+            </a>
+            <a href="/view_cart" class="sidebar-link" title="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                <span class="sidebar-label">Cart</span>
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="sidebar-user-row">
+                <div class="sidebar-user">{{ username|first|upper }}</div>
+                <div class="sidebar-user-info">
+                    <span class="sidebar-username">{{ username }}</span>
+                    <a href="/logout" class="sidebar-logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <a href="/customer_home" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back to Restaurants
+        </a>
+
+        <div class="page-header">
+            <h1>{{ restaurant.name }}</h1>
+            <p>Menu items for {{ restaurant.name }} - {{ restaurant.cuisine }}</p>
+        </div>
+
+        <div class="menu-grid">
+            {% for item in menu_items %}
+            <div class="menu-card">
+                <img src="{{ item.picture }}" alt="{{ item.name }}" class="menu-card-img">
+                <div class="menu-card-body">
+                    <div class="menu-card-top">
+                        <div class="menu-card-name">{{ item.name }}</div>
+                        <div class="menu-card-price">&#8377;{{ item.price }}</div>
+                    </div>
+                    <p class="menu-card-desc">{{ item.description }}</p>
+                    <div class="menu-card-bottom">
+                        {% if item.vegeterian %}
+                        <span class="veg-badge veg"><span class="dot"></span> Veg</span>
+                        {% else %}
+                        <span class="veg-badge non-veg"><span class="dot"></span> Non-Veg</span>
+                        {% endif %}
+                        <form method="POST" action="{% url 'add_to_cart' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-add-cart">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <p>No menu items available yet</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <div id="toast" class="toast">
+        <span class="toast-text"><strong></strong> added to cart</span>
+        <a href="/view_cart" class="toast-cart-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Go to Cart
+        </a>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var main = document.querySelector('.main');
+            sidebar.classList.toggle('expanded');
+            if (sidebar.classList.contains('expanded')) {
+                main.style.marginLeft = '220px';
+            } else {
+                main.style.marginLeft = '72px';
+            }
+        }
+
+        var params = new URLSearchParams(window.location.search);
+        var addedItem = params.get('added');
+        if (addedItem) {
+            var toast = document.getElementById('toast');
+            toast.querySelector('strong').textContent = addedItem;
+            toast.classList.add('show');
+            var url = new URL(window.location);
+            url.searchParams.delete('added');
+            window.history.replaceState({}, '', url);
+        }
+    </script>
+    <script>
+        function toggleMobileSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var backdrop = document.getElementById('sidebarBackdrop');
+            if (!sidebar || !backdrop) return;
+            var open = sidebar.classList.toggle('mobile-open');
+            sidebar.classList.toggle('expanded', open);
+            backdrop.classList.toggle('show', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+        var _originalToggleSidebar = window.toggleSidebar;
+        window.toggleSidebar = function () {
+            if (window.matchMedia('(max-width: 900px)').matches) {
+                toggleMobileSidebar();
+                return;
+            }
+            if (_originalToggleSidebar) _originalToggleSidebar();
+        };
+        document.addEventListener('keydown', function (e) {
+            if (e.key !== 'Escape') return;
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+        });
+        document.addEventListener('click', function (e) {
+            if (e.target.closest && e.target.closest('.sidebar-backdrop')) toggleMobileSidebar();
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('.sidebar-link'), function (link) {
+            link.addEventListener('click', function () {
+                var sidebar = document.getElementById('sidebar');
+                if (sidebar && sidebar.classList.contains('mobile-open')) toggleMobileSidebar();
+            });
+        });
+    </script>
+
+</body>
+</html>

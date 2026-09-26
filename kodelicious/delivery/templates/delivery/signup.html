@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - Kodelicious</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body class="page-signup">
+    <nav class="navbar">
+      <a href="/" class="brand">
+        <div class="logo-icon">K</div>
+        Kodelicious
+      </a>
+      <div class="navbar-links">
+        <a href="/">Home</a>
+        <a href="open_signin">Sign In</a>
+        <a href="open_signup" class="active">Sign Up</a>
+      </div>
+    </nav>
+    <div class="content">
+      <div class="left-panel">
+        <div class="brand-logo">
+          <div class="logo-icon">K</div>
+          Kodelicious
+        </div>
+        <div class="brand-tagline">Join thousands of happy foodies</div>
+        <div class="hero-emoji">&#127828;</div>
+        <div class="features">
+          <div class="feature-item">
+            <div class="feature-icon">&#127873;</div>
+            <span>Get exclusive deals and discounts</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">&#128197;</div>
+            <span>Track your orders in real time</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">&#11088;</div>
+            <span>Rate and review your favourite meals</span>
+          </div>
+        </div>
+      </div>
+      <div class="right-panel">
+        <div class="form-container">
+          <div class="form-header">
+            <h3>Create Account</h3>
+            <p class="subtitle">Sign up to start ordering delicious meals</p>
+          </div>
+          <form action="{% url 'signup' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" name="username" placeholder="Choose a username" />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" name="password" placeholder="Create a password" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="you@example.com" />
+              </div>
+              <div class="form-group">
+                <label>Mobile</label>
+                <input type="text" name="mobile" placeholder="Phone number" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Delivery Address</label>
+              <textarea name="address" placeholder="Enter your delivery address"></textarea>
+            </div>
+            <button type="submit" class="btn-submit">SIGN UP</button>
+          </form>
+          <p class="link">Already have an account? <a href="open_signin">Sign In</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
