@@ -87,14 +87,15 @@ def signup(request):
         if Customer.objects.filter(username__iexact=username).exists():
             return render(request, 'delivery/signup.html', {'error': 'Username already taken.'})
 
-        user = Customer.objects.create(
+        user = Customer(
             username=username,
-            password=password,
             email=email,
             mobile=mobile,
             address=address,
             is_admin=False,
         )
+        user.set_password(password)
+        user.save()
         request.session['user_id'] = user.id
         request.session['username'] = user.username
         return redirect('customer_home')
@@ -106,14 +107,16 @@ def signin(request):
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password')
         try:
-            user = Customer.objects.get(username__iexact=username, password=password)
-            request.session['user_id'] = user.id
-            request.session['username'] = user.username
-            if user.is_admin:
-                return redirect('admin_home')
-            return redirect('customer_home')
+            user = Customer.objects.get(username__iexact=username)
         except Customer.DoesNotExist:
             return render(request, 'delivery/signin.html', {'error': 'Invalid username or password'})
+        if not user.check_password(password):
+            return render(request, 'delivery/signin.html', {'error': 'Invalid username or password'})
+        request.session['user_id'] = user.id
+        request.session['username'] = user.username
+        if user.is_admin:
+            return redirect('admin_home')
+        return redirect('customer_home')
     return render(request, 'delivery/signin.html')
 
 

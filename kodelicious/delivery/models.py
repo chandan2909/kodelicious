@@ -1,10 +1,20 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 # Create your models here.
-class Customer(models.Model):
-    username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=20)
-    email = models.CharField(max_length=20)
+class Customer(AbstractUser):
+    groups = models.ManyToManyField(
+        'auth.Group',
+        blank=True,
+        related_name='customer_set',
+        related_query_name='customer',
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        blank=True,
+        related_name='customer_set',
+        related_query_name='customer',
+    )
     mobile = models.CharField(max_length=10)
     address = models.CharField(max_length=50)
     is_admin = models.BooleanField(default=False)
