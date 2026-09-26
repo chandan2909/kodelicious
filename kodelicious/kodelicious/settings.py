@@ -191,5 +191,5 @@ if not DEBUG:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-RAZORPAY_KEY_SECRET = env_str("RAZORPAY_KEY_SECRET", "0RjoAmGj7Nbf0ldiUZE7OByY")
-RAZORPAY_KEY_ID = env_str("RAZORPAY_KEY_ID", "rzp_test_TgBLdtHJF4huZm")
+RAZORPAY_KEY_SECRET = env_str("RAZORPAY_KEY_SECRET", "")
+RAZORPAY_KEY_ID = env_str("RAZORPAY_KEY_ID", "")
