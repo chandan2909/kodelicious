@@ -57,6 +57,9 @@ label { display: block; margin-bottom: 7px; font-weight: 500; color: #1A1B2E; fo
   .mobile-menu-btn { display: flex; }
   .sidebar.mobile-open { transform: translateX(0); }
 }
+/* Hide the floating hamburger while the sidebar is open (it would overlap
+   the sidebar's own logo/close button). */
+body:has(.sidebar.mobile-open) .mobile-menu-btn { display: none; }
 
 /* ---- base ---- */
 /* ── Dashboard Cards ── */
@@ -337,6 +340,14 @@ label { display: block; margin-bottom: 7px; font-weight: 500; color: #1A1B2E; fo
   .left-panel { display: none; }
   .navbar { padding: 14px 20px; }
 }
+/* ---- @media (max-width: 560px): auth navbar ---- */
+@media (max-width: 560px) {
+  .navbar { padding: 14px 16px; gap: 8px; }
+  .navbar .brand { font-size: 1.05rem; white-space: nowrap; }
+  .navbar-links { gap: 4px; min-width: 0; }
+  .navbar-links a { white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; }
+  .navbar-links a:first-child { display: none; }
+}
 
 /* ---- base ---- */
 .form-row { display: flex; gap: 14px; }
@@ -503,15 +514,29 @@ body:where(.page-landing) { font-family: 'DM Sans', sans-serif; min-height: 100v
 :where(body.page-landing) .features { display: flex; justify-content: center; gap: 20px; padding: 0 60px 80px; width: 100%; max-width: 1140px; margin: 0 auto; }
 :where(body.page-landing) .feature-icon { font-size: 1.8rem; margin-bottom: 18px; display: block; }
 @media (max-width: 900px) {
-  :where(body.page-landing) main > nav { padding: 16px 24px; }
+  :where(body.page-landing) main > nav { padding: 16px 24px 16px 76px; gap: 12px; }
+  :where(body.page-landing) .logo { font-size: 1.15rem; white-space: nowrap; }
+  :where(body.page-landing) .nav-links a { white-space: nowrap; padding: 8px 13px; font-size: 0.85rem; }
+  :where(body.page-landing) .nav-links a.btn-nav { padding: 8px 16px; }
   :where(body.page-landing) .features { padding: 0 24px 60px; flex-direction: column; }
 }
 :where(body.page-landing) .main { margin-left: 72px; transition: margin-left 0.25s ease; }
 @media (max-width: 900px) {
   :where(body.page-landing) .main { margin-left: 0 !important; padding-top: 0 !important; }
-  :where(body.page-landing) main > nav { padding-left: 76px; }
   :where(body.page-landing) .sidebar { display: flex !important; transform: translateX(-100%); transition: transform 0.25s ease, width 0.25s ease; z-index: 110; box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); }
   :where(body.page-landing) .main { margin-left: 0 !important; padding-top: 76px; }
+}
+/* ── Mobile navbar: declutter so nothing overlaps or wraps ── */
+@media (max-width: 560px) {
+  :where(body.page-landing) main > nav { padding: 14px 16px 14px 68px; gap: 8px; }
+  :where(body.page-landing) .logo { font-size: 1.05rem; gap: 8px; }
+  :where(body.page-landing) .nav-links { gap: 4px; }
+  :where(body.page-landing) .nav-links a.nav-active { display: none; }
+}
+@media (max-width: 420px) {
+  :where(body.page-landing) .logo-text { display: none; }
+  :where(body.page-landing) .hero-text h1 { font-size: 2.6rem; }
+  :where(body.page-landing) .btn { padding: 12px 18px; font-size: 0.85rem; }
 }
 /* ── Layout hardening: no page-level horizontal overflow ── */
 :where(body.page-landing) .main { min-width: 0; }
@@ -570,7 +595,10 @@ body:where(.page-show-restaurants) { font-family: 'DM Sans', sans-serif; min-hei
   :where(body.page-show-restaurants) .page-header { flex-direction: column; align-items: flex-start; gap: 16px; }
   :where(body.page-show-restaurants) .sidebar { display: flex !important; transform: translateX(-100%); transition: transform 0.25s ease, width 0.25s ease; z-index: 110; box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); }
   :where(body.page-show-restaurants) .main { margin-left: 0 !important; padding-top: 76px; }
+  :where(body.page-show-restaurants) .table-card { overflow-x: auto; }
 }
+/* ── Layout hardening: no page-level horizontal overflow ── */
+:where(body.page-show-restaurants) .main { min-width: 0; }
 /* ── Layout hardening: no page-level horizontal overflow ── */
 :where(body.page-show-restaurants) .main { min-width: 0; }
 :where(body.page-show-restaurants) .cart-table-wrapper { overflow-x: auto; }
